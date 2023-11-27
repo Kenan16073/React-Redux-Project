@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.nav ul li a{
+    padding: 10px 20px !important;
+}
+
+.active{
+    color: black !important;
+}
