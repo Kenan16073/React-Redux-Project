@@ -3,10 +3,31 @@
 @tailwind utilities;
 
 
-.nav ul li a{
+.nav ul li a {
     padding: 10px 20px !important;
 }
 
-.active{
+.active {
     color: black !important;
+}
+.dark .active{
+    color: #61DBFB !important;
+}
+body {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+body.dark {
+    background-color: #111827;
+    color: #fff !important;
+}
+
+.dark .custom-nav li a {
+    color: #fff !important;
+}
+
+.dark .bg_color {
+    background-color: #2b2a2a !important;
 }
