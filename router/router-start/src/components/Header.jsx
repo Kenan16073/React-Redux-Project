@@ -1,8 +1,7 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useNavigate } from "react-router-dom"
 import reactImage from "../assets/img/react.png"
 import { useContext } from "react"
 import { commonContext } from "../context/common-mode";
-
 
 
 export function Header() {
@@ -10,6 +9,7 @@ export function Header() {
 
   const { mode, setMode } = useContext(commonContext);
   const { token, setToken } = useContext(commonContext);
+  const navigate = useNavigate()
 
   const modeClick = () => {
     setMode(!mode);
@@ -23,7 +23,8 @@ export function Header() {
 
   const logout = () => {
     sessionStorage.removeItem("token");
-    setToken(false);
+    setToken(null);
+    navigate('/login')
   };
 
   return (
@@ -65,18 +66,11 @@ export function Header() {
               {
                 !token ? <NavLink to="/login" className="block py-2 px-3 text-white bg-gray-500 rounded md:bg-transparent md:text-gray-500 md:p-0 dark:text-white md:dark:text-white " aria-current="page">Login</NavLink>
                   : <>
-                    <button onClick={logout}>
-                      logout user
+                    <button className="block py-2 px-3 text-white bg-gray-500 rounded md:bg-transparent md:text-gray-500 md:p-0 dark:text-white md:dark:text-white " onClick={logout}>
+                      Logout
                     </button>
                   </>
               }
-
-
-
-
-
-
-              {/* <NavLink to="/login" className="block py-2 px-3 text-white bg-gray-500 rounded md:bg-transparent md:text-gray-500 md:p-0 dark:text-white md:dark:text-white " aria-current="page">Login</NavLink> */}
             </li>
 
           </ul>

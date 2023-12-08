@@ -5,12 +5,18 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { commonContext } from "../../context/common-mode";
 import { useNavigate } from "react-router-dom";
-
+import { useSignInMutation } from "../../store/login/loginApi";
+import Loading from "../Loading";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/login/loginSlice";
 
 
 export default function Login() {
 
 
+  const dispatch = useDispatch()
+
+  const [signIn, { isLoading, isError }] = useSignInMutation();
   const navigate = useNavigate();
   const { setToken } = useContext(commonContext);
 
@@ -20,14 +26,18 @@ export default function Login() {
       password: '',
     },
     validationSchema: loginSchema,
-    onSubmit: async (values) => {
-      const { data } = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8',
-        {
-          email: values.email,
-          password: values.password,
-          returnSecureToken: true
-        }
-      );
+    onSubmit: (values) => {
+      // const { data } = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8',
+      //   {
+      //     email: values.email,
+      //     password: values.password,
+      //     returnSecureToken: true
+      //   }
+      // );
+      signIn(values)
+      dispatch(setUser(values))
+
+      
       setToken(data.idToken);
       sessionStorage.setItem('token', data.idToken);
       formik.resetForm();
@@ -41,6 +51,7 @@ export default function Login() {
 
   return (
 
+    
 
     <div className="font-sans " onSubmit={formik.handleSubmit}>
       <div className="transition-all dark:bg-gray-900 relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 ">
@@ -85,10 +96,11 @@ export default function Login() {
 
               <div className="mt-7">
                 <button className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                  Login
+                  {isLoading ? <Loading/> : 'Login'}
                 </button>
               </div>
 
+              
               <div className="flex mt-7 items-center text-center">
                 <hr className="border-gray-300 border-1 w-full rounded-md" />
                 <label

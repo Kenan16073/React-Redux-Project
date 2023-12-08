@@ -9,7 +9,6 @@ const DarkModeProvider = ({children})=>{
     const [mode ,setMode] = useState(localStorage.getItem('mode') === null ? false : JSON.parse(localStorage.getItem('mode')) );
     const [token, setToken] = useState(sessionStorage.getItem('token') === null ? null : sessionStorage.getItem('token') );
     
-
     let values = {
         mode,
         setMode,

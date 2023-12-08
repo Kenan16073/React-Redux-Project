@@ -1,9 +1,12 @@
 import { useFormik } from 'formik';
 import registerSchema from '../../validation/register';
 import axios from 'axios';
+import { useRegisterMutation } from '../../store/register/registerApi';
 
 export function Register() {
 
+
+    const [register, {isLoading ,isError}] = useRegisterMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -11,13 +14,13 @@ export function Register() {
             password: '',
         },
         validationSchema: registerSchema,
-        onSubmit: async (values) => {
-            const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8', {
-                email: values.email,
-                password: values.password,
-                returnSecureToken: true
-            })
-            console.log(res);
+        onSubmit: (values) => {
+            // const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8', {
+            //     email: values.email,
+            //     password: values.password,
+            //     returnSecureToken: true
+            // })
+            register(values)
             formik.resetForm();
         },
     });
@@ -89,15 +92,6 @@ export function Register() {
                                     Google
                                 </button>
                             </div>
-
-                            {/* <div className="mt-7">
-                                <div className="flex justify-center items-center">
-                                    <label htmlFor='' className="mr-2" >Don't have an account?</label>
-                                    <a href="#" className=" text-blue-500 transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                                        Sign up
-                                    </a>
-                                </div>
-                            </div> */}
                         </form>
                     </div>
                 </div>
