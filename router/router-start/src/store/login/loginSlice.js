@@ -9,7 +9,7 @@ const initialState = {
         password: ''
 
     },
-    token: null
+    token: sessionStorage.getItem('token')
 }
 
 
@@ -18,17 +18,22 @@ const loginSlice = createSlice({
     initialState,
     reducers : {
         setUser(state,action){
-            state.user.email = action.payload
+            state.user.email = action.payload.email
             state.user.password = action.payload.password
         },
         setToken(state,action){
             state.token = action.payload
+            sessionStorage.setItem('token',action.payload);
+        },
+        Logout(state){
+            sessionStorage.removeItem("token");
+            state.token = null;
         }
     }
 
 })
 
-export const {setUser} = loginSlice.actions
+export const {setUser ,setToken,Logout} = loginSlice.actions
 
 
 export {loginSlice}

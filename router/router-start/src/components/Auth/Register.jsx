@@ -1,12 +1,19 @@
 import { useFormik } from 'formik';
 import registerSchema from '../../validation/register';
-import axios from 'axios';
 import { useRegisterMutation } from '../../store/register/registerApi';
+import { useDispatch } from 'react-redux';
+import { setToken, setUser } from '../../store/login/loginSlice';
+import { useState } from 'react';
+import { ErrorMessage } from '../ErrorMessage';
+import Loading from '../Loading';
 
 export function Register() {
 
 
-    const [register, {isLoading ,isError}] = useRegisterMutation();
+    const [register, { isLoading }] = useRegisterMutation();
+    const dispatch = useDispatch()
+    const [errorMessage, setErrorMessage] = useState('')
+    const [error, setError] = useState(false)
 
     const formik = useFormik({
         initialValues: {
@@ -14,13 +21,18 @@ export function Register() {
             password: '',
         },
         validationSchema: registerSchema,
-        onSubmit: (values) => {
-            // const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8', {
-            //     email: values.email,
-            //     password: values.password,
-            //     returnSecureToken: true
-            // })
-            register(values)
+        onSubmit: async (values) => {
+
+            const res = await register(values)
+            
+            if (res.data) {
+                dispatch(setUser(values))
+                dispatch(setToken(res.data.token))
+            } else {
+                setError(true)
+                setErrorMessage(res.error.data.error.message)
+            }
+            
             formik.resetForm();
         },
     });
@@ -38,6 +50,8 @@ export function Register() {
                         <label htmlFor="" className="block mt-3 text-sm text-gray-700 text-center font-semibold">
                             Register
                         </label>
+
+                        {error && <ErrorMessage errorMessage={errorMessage} /> }
                         <form method="#" action="#" className="mt-10">
 
 
@@ -70,8 +84,8 @@ export function Register() {
 
 
                             <div className="mt-7">
-                                <button className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                                    Register
+                                <button type='submit' className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                                {isLoading ? <Loading/> : 'Register'}
                                 </button>
                             </div>
 

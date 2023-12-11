@@ -1,12 +1,12 @@
-import { useContext } from "react";
-import { commonContext } from "../context/common-mode";
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export function RequareAuth() {
 
-    const { token } = useContext(commonContext);
+    const {token} = useSelector((state)=>state.login)
+
     return (
-        token !== null ? <Outlet />
+        token !== null ? <div className="max-w-screen-xl mx-auto"><Outlet /></div> 
             : <Navigate to='/login' />
     )
 }

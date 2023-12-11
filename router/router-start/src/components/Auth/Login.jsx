@@ -1,24 +1,24 @@
 import { useFormik } from "formik"
 import loginSchema from '../../validation/login';
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { commonContext } from "../../context/common-mode";
 import { useNavigate } from "react-router-dom";
 import { useSignInMutation } from "../../store/login/loginApi";
 import Loading from "../Loading";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../store/login/loginSlice";
+import { setUser,setToken } from "../../store/login/loginSlice";
+import { useState } from "react";
+import { ErrorMessage } from "../ErrorMessage";
 
 
 export default function Login() {
 
 
   const dispatch = useDispatch()
-
-  const [signIn, { isLoading, isError }] = useSignInMutation();
+  const [signIn, { isLoading }] = useSignInMutation();
   const navigate = useNavigate();
-  const { setToken } = useContext(commonContext);
+  const [errorMessage, setErrorMessage] = useState('')
+  const [error, setError] = useState(false)
+
 
   const formik = useFormik({
     initialValues: {
@@ -26,22 +26,17 @@ export default function Login() {
       password: '',
     },
     validationSchema: loginSchema,
-    onSubmit: (values) => {
-      // const { data } = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8',
-      //   {
-      //     email: values.email,
-      //     password: values.password,
-      //     returnSecureToken: true
-      //   }
-      // );
-      signIn(values)
-      dispatch(setUser(values))
-
-      
-      setToken(data.idToken);
-      sessionStorage.setItem('token', data.idToken);
+    onSubmit: async (values) => {
+      const res = await signIn(values);
+      if(res.data){
+        dispatch(setUser(values));
+        dispatch(setToken(res.data.idToken))
+        navigate('/');
+      }else{
+        setError(true)
+        setErrorMessage(res.error.data.error.message)
+      }
       formik.resetForm();
-      navigate('/');
     },
   })
 
@@ -59,14 +54,15 @@ export default function Login() {
           <div className="card bg-blue-400 shadow-lg  w-full h-full rounded-3xl absolute  transform -rotate-6"></div>
           <div className="card bg-red-400 shadow-lg  w-full h-full rounded-3xl absolute  transform rotate-6"></div>
           <div className="relative w-full rounded-3xl  px-6 py-4 bg-gray-100 shadow-md">
-
-
             <label
               htmlFor=""
               className="block mt-3 text-sm text-gray-700 text-center font-semibold"
             >
               Login
             </label>
+
+            {error && <ErrorMessage errorMessage={errorMessage} /> }
+
             <form method="#" action="#" className="mt-10">
               <div className="mt-7">
                 <input

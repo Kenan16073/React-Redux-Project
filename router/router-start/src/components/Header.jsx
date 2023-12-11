@@ -2,14 +2,16 @@ import { Link, NavLink, useNavigate } from "react-router-dom"
 import reactImage from "../assets/img/react.png"
 import { useContext } from "react"
 import { commonContext } from "../context/common-mode";
+import { useSelector, useDispatch } from "react-redux";
+import { Logout } from "../store/login/loginSlice";
 
 
 export function Header() {
 
-
+  const { token } = useSelector((state) => state.login)
   const { mode, setMode } = useContext(commonContext);
-  const { token, setToken } = useContext(commonContext);
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const modeClick = () => {
     setMode(!mode);
@@ -22,8 +24,7 @@ export function Header() {
   }
 
   const logout = () => {
-    sessionStorage.removeItem("token");
-    setToken(null);
+    dispatch(Logout())
     navigate('/login')
   };
 
@@ -63,14 +64,42 @@ export function Header() {
               <NavLink to="/products" className="block py-2 px-3 text-white bg-gray-500 rounded md:bg-transparent md:text-gray-500 md:p-0 dark:text-white md:dark:text-white " aria-current="page">Products</NavLink>
             </li>
             <li>
+
               {
                 !token ? <NavLink to="/login" className="block py-2 px-3 text-white bg-gray-500 rounded md:bg-transparent md:text-gray-500 md:p-0 dark:text-white md:dark:text-white " aria-current="page">Login</NavLink>
-                  : <>
-                    <button className="block py-2 px-3 text-white bg-gray-500 rounded md:bg-transparent md:text-gray-500 md:p-0 dark:text-white md:dark:text-white " onClick={logout}>
-                      Logout
+                  :
+                  <>
+                    <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" className=" text-gray-500 dark:text-white  font-medium rounded-lg   text-center inline-flex items-center  " type="button">Account <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                    </svg>
                     </button>
+
+                    <div id="dropdownHover" className=" z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                      <ul className=" py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+                        <li>
+                          <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><i className="fa-solid fa-table-columns"></i> Dashboard</a>
+                        </li>
+                        <li>
+                          <Link to="/admin/add" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><i className="fa-regular fa-address-book"></i> Products Add</Link>
+                        </li>
+                        <li className="block  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                          <button onClick={logout} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><i className="fa-solid fa-right-from-bracket"></i>                   Sign out</button>
+                        </li>
+                      </ul>
+                    </div>
                   </>
+
+
               }
+
+
+
+
+
+
+
+
+              
             </li>
 
           </ul>
