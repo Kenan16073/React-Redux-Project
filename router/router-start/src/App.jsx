@@ -11,6 +11,7 @@ import { useEffect, useContext } from "react";
 import { commonContext } from "./context/common-mode"
 import { RequareAuth } from "./components/RequareAuth"
 import { Add } from "./components/Admin/Add"
+import { Dashboard } from "./components/Admin/Dashboard"
 
 export default function App() {
 
@@ -45,6 +46,8 @@ export default function App() {
           {/* private rote */}
           <Route element={<RequareAuth />}>
             <Route path="/admin/add" element={<Add/>}/>
+            <Route path="/admin/dashboard" element={<Dashboard/>}/>
+
           </Route>
         </Routes>
 

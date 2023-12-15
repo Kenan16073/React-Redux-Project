@@ -11,7 +11,7 @@ const loginApi = createApi({
             signIn: build.mutation({
                 query: (user) => {
                     return {
-                        url: `accounts:signInWithPassword?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8`,
+                        url: `/accounts:signInWithPassword?key=AIzaSyAwl0HfmoeAQzh9PewwFkvHwQOKIlJskv8`,
                         method: 'POST',
                         body: {
                             email: user.email,

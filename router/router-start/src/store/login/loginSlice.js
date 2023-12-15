@@ -7,7 +7,6 @@ const initialState = {
     user: {
         email: '',
         password: ''
-
     },
     token: sessionStorage.getItem('token')
 }
