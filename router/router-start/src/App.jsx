@@ -13,7 +13,6 @@ import { RequareAuth } from "./components/RequareAuth"
 import { Add } from "./components/Admin/Add"
 import { Dashboard } from "./components/Admin/Dashboard"
 import { Edit } from "./components/Admin/Edit"
-import { Modal } from "./components/Modal"
 
 export default function App() {
 
