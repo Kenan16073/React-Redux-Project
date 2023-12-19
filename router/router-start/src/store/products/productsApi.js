@@ -12,6 +12,15 @@ export const productsApi = apiCommon.injectEndpoints({
                 }
             }
         }),
+        productsEdit: builder.mutation({
+            query: (products_edit) => {
+                return {
+                    url: `products/${products_edit.id}.json`,
+                    method : 'PATCH',
+                    body : products_edit
+                }
+            }
+        }),
         productsGet: builder.query({
             query: () => {
                 return {
@@ -19,11 +28,19 @@ export const productsApi = apiCommon.injectEndpoints({
                     method : 'GET',
                 }
             }
-        })
+        }),
+        productsGetOne: builder.query({
+            query: (id) => {
+                return {
+                    url: `products/${id}.json`,
+                    method : 'GET',
+                }
+            }
+        }),
     })
 });
 
 
 
 
-export const {useProductsAddMutation,useProductsGetQuery} = productsApi;
+export const {useProductsAddMutation,useProductsGetQuery,useProductsGetOneQuery,useProductsEditMutation} = productsApi;

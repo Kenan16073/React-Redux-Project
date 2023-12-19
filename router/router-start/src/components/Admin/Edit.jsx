@@ -1,28 +1,52 @@
 import { useFormik } from "formik"
 import addproductSchema from "../../validation/addProducts"
-import { useProductsAddMutation } from "../../store/products/productsApi";
-import Loading  from '../Loading'
+import Loading from '../Loading'
+import { useNavigate, useParams } from "react-router-dom"
+import { useProductsEditMutation, useProductsGetOneQuery } from "../../store/products/productsApi"
+import { useEffect } from "react"
 
-export function Add() {
+export function Edit() {
 
-    const [productsAdd, {isLoading}] = useProductsAddMutation()
+    const {id} = useParams()
+    const {data, isLoading,isError} = useProductsGetOneQuery(id)
+    const [editProduct,requset] = useProductsEditMutation()
+    const navigate = useNavigate()
+
+
+    let content;
+
+    if(isLoading){
+        content = 'loading'
+    }else if(isError){
+        content = 'error'
+    }else{
+        content = data
+    }
+
 
     const formik = useFormik({
         initialValues: {
             title: '',
             link: '',
-            price: '',
+            price:'',
             brand: '',
             description: '',
-            status : false
+            status: false
         },
         validationSchema: addproductSchema,
-        onSubmit: values => {
-            console.log(values);
-            productsAdd(values)
+        onSubmit: async values => {
+            const res = await editProduct(values)
+            if(res.data){
+                navigate('/admin/dashboard')
+            }
             formik.resetForm();
         },
     })
+
+
+    useEffect(()=>{
+        formik.setValues({...content,id})
+    },[content])
 
 
 
@@ -55,7 +79,7 @@ export function Add() {
                             type="text"
                             name="link"
                             id="base-input"
-                            
+
                             className=
                             {
                                 formik.touched.link && formik.errors.link ? "bg-red-100 border border-red-200 text-red-900 text-sm rounded-lg focus:ring-red-200 focus:border-red-500 block w-full p-2.5 dark:bg-gary-700 dark:border-red-600 dark:placeholder-red-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
@@ -102,14 +126,14 @@ export function Add() {
                                 formik.touched.description && formik.errors.description ? "bg-red-100 border border-red-200 text-red-900 text-sm rounded-lg focus:ring-red-200 focus:border-red-500 block w-full p-2.5 dark:bg-gary-700 dark:border-red-600 dark:placeholder-red-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
                                     : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             }
-                            
+
 
                             placeholder="Leave a comment..."></textarea>
-                            
+
                     </div>
                     <div className="flex justify-end">
                         <button type="submit" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            { isLoading ? <Loading/>  : 'Add'}
+                            { isLoading ? <Loading/>  : 'Update'}
                         </button>
                     </div>
                 </form>

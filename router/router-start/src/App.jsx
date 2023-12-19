@@ -12,6 +12,8 @@ import { commonContext } from "./context/common-mode"
 import { RequareAuth } from "./components/RequareAuth"
 import { Add } from "./components/Admin/Add"
 import { Dashboard } from "./components/Admin/Dashboard"
+import { Edit } from "./components/Admin/Edit"
+import { Modal } from "./components/Modal"
 
 export default function App() {
 
@@ -46,8 +48,8 @@ export default function App() {
           {/* private rote */}
           <Route element={<RequareAuth />}>
             <Route path="/admin/add" element={<Add/>}/>
+            <Route path="/admin/edit/:id" element={<Edit/>}/>
             <Route path="/admin/dashboard" element={<Dashboard/>}/>
-
           </Route>
         </Routes>
 
