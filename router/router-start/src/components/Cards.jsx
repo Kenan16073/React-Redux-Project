@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 export function Cards({ item }) {
     return (
+
+
         <div className="max-w-sm text-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <img className="rounded-t-lg h-[420px] w-full mx-auto object-contain" src={item.image} alt="" />
             <div className="p-5">

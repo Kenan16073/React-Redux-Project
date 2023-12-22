@@ -10,7 +10,8 @@ export const productsApi = apiCommon.injectEndpoints({
                     method : 'POST',
                     body : products
                 }
-            }
+            },
+            invalidatesTags: ['Products']
         }),
         productsEdit: builder.mutation({
             query: (products_edit) => {
@@ -19,9 +20,11 @@ export const productsApi = apiCommon.injectEndpoints({
                     method : 'PATCH',
                     body : products_edit
                 }
-            }
+            },
+            invalidatesTags: ['Products']
         }),
         productsGet: builder.query({
+            providesTags: ['Products'],
             query: () => {
                 return {
                     url: 'products.json',
@@ -37,10 +40,19 @@ export const productsApi = apiCommon.injectEndpoints({
                 }
             }
         }),
+        productsDelete: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `products/${id}.json`,
+                    method : 'DELETE'
+                }
+            },
+            invalidatesTags: ['Products']
+        }),
     })
 });
 
 
 
 
-export const {useProductsAddMutation,useProductsGetQuery,useProductsGetOneQuery,useProductsEditMutation} = productsApi;
+export const {useProductsAddMutation,useProductsGetQuery,useProductsGetOneQuery,useProductsEditMutation,useProductsDeleteMutation} = productsApi;
