@@ -4,7 +4,7 @@ import axios from 'axios'
 export const testApi = createAsyncThunk(
     'testApi',
     async (id)=> {
-        const res = await axios.get(`https://products-b96cc-default-rtdb.firebaseio.com/products${id}.json`);
+        const res = await axios.get(`https://products-b96cc-default-rtdb.firebaseio.com/products/${id}.json`);
         return res.data
     }
 )
@@ -29,6 +29,7 @@ const productsSlice = createSlice({
         })
         .addCase(testApi.fulfilled,(state,actions)=>{
             state.viewProducts = actions.payload
+            state.loading = false
         })
     }
 

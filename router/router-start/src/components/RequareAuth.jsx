@@ -6,7 +6,7 @@ export function RequareAuth() {
     const {token} = useSelector((state)=>state.login)
 
     return (
-        token !== null ? <div className="max-w-screen-xl mx-auto"><Outlet /></div> 
+        token  ? <div className="max-w-screen-xl mx-auto"><Outlet /></div> 
             : <Navigate to='/login' />
     )
 }

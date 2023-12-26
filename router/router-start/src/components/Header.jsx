@@ -1,9 +1,10 @@
 import { Link, NavLink, useNavigate } from "react-router-dom"
 import reactImage from "../assets/img/react.png"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { commonContext } from "../context/common-mode";
 import { useSelector, useDispatch } from "react-redux";
 import { Logout } from "../store/login/loginSlice";
+import { decodeToken } from "react-jwt";
 
 
 export function Header() {
@@ -12,6 +13,7 @@ export function Header() {
   const { mode, setMode } = useContext(commonContext);
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [userdata, setUserData] = useState('')
 
   const modeClick = () => {
     setMode(!mode);
@@ -23,6 +25,15 @@ export function Header() {
     }
   }
 
+
+  useEffect(() => {
+    const decodedToken = decodeToken(token)
+    if (decodedToken) {
+      const { email } = decodedToken
+      setUserData(email)
+    }
+  }, [])
+
   const logout = () => {
     dispatch(Logout())
     navigate('/login')
@@ -31,7 +42,7 @@ export function Header() {
   return (
 
 
-    <nav className="transition-all bg-white border-gray-500 dark:bg-gray-900">
+    <nav className="fixed top-0 z-50 w-full transition-all bg-white border-gray-500 dark:bg-gray-900">
       <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src={reactImage} className="h-10" alt="Flowbite Logo" />
@@ -76,6 +87,9 @@ export function Header() {
 
                     <div id="dropdownHover" className=" z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                       <ul className=" py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+                        <li className="block text-xs font-normal px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                          {userdata}
+                        </li>
                         <li>
                           <Link to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><i className="fa-solid fa-table-columns"></i> Dashboard</Link>
                         </li>

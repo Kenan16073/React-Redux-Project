@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-
+import Cookies from 'js-cookie'
 
 
 
@@ -8,7 +8,7 @@ const initialState = {
         email: '',
         password: ''
     },
-    token: sessionStorage.getItem('token')
+    token: Cookies.get('token')
 }
 
 
@@ -22,10 +22,10 @@ const loginSlice = createSlice({
         },
         setToken(state,action){
             state.token = action.payload
-            sessionStorage.setItem('token',action.payload);
+            Cookies.set('token', action.payload)
         },
         Logout(state){
-            sessionStorage.removeItem("token");
+            Cookies.remove('token')
             state.token = null;
         }
     }

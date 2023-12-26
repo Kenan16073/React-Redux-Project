@@ -41,7 +41,7 @@ export function Register() {
 
     return (
 
-        <div className="font-sans" onSubmit={formik.handleSubmit}>
+        <div className="font-sans h-screen" onSubmit={formik.handleSubmit}>
             <div className="transition-all dark:bg-gray-900  relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 ">
                 <div className="relative sm:max-w-sm w-full">
                     <div className="card bg-blue-400 shadow-lg  w-full h-full rounded-3xl absolute  transform -rotate-6"></div>

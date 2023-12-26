@@ -13,25 +13,17 @@ export function Dashboard() {
     const [selectId, setSelectId] = useState('')
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch()
-    const { loading, error, viewProducts } = useSelector((state) => state.productsSlice);
+    const { viewProducts, loading } = useSelector((state) => state.productsSlice);
 
     function Delete(id) {
         deleteData(id)
         setSelectId(id)
     }
 
-    
-
-
-
     function openModal(id) {
         setShowModal(true)
         dispatch(testApi(id))
     }
-
-
-
-
 
     let content;
 
@@ -147,42 +139,47 @@ export function Dashboard() {
     } else if (isError) {
         content = 'Error'
     } else {
-        let productsArr = Object.entries(data);
+        let productsArr = data !== null ? Object.entries(data) : []
         content =
             <tbody>
-                {productsArr.map((item, index) => (
+                {productsArr.length >= 1 ?
+                    productsArr.map((item, index) => (
 
-                    <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {item[0]}
-                        </th>
-                        <td className="px-6 py-4">
-                            {item[1].title}
-                        </td>
-                        <td className="px-6 py-4">
-                            {item[1].price}
-                        </td>
-                        <td className="px-6 py-4">
-                            {item[1].brand}
-                        </td>
-                        <td className="px-6 py-4">
-                            {item[1].status ? "Active" : 'Deactive'}
-                        </td>
-                        <td className="flex justify-evenly py-4">
-                            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onClick={() => openModal(item[0])}  >Views</button>
-                            <Link to={`/admin/edit/${item[0]}`} className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Update</Link>
-                            <button onClick={() => { Delete(item[0]) }} type="button" className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">{request.isLoading && selectId === item[0] ? <Loading /> : 'Delete'}</button>
-                        </td>
-                    </tr>
+                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {item[0]}
+                            </th>
+                            <td className="px-6 py-4">
+                                {item[1].title}
+                            </td>
+                            <td className="px-6 py-4">
+                                {item[1].price}
+                            </td>
+                            <td className="px-6 py-4">
+                                {item[1].brand}
+                            </td>
+                            <td className="px-6 py-4">
+                                {item[1].status ? (<span className="text-green-500">Active</span>) : (<span className="text-red-500">Deactive</span>)}
+                            </td>
+                            <td className="flex justify-evenly py-4">
+                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onClick={() => openModal(item[0])}  >Views</button>
+                                <Link to={`/admin/edit/${item[0]}`} className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Update</Link>
+                                <button onClick={() => { Delete(item[0]) }} type="button" className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">{request.isLoading && selectId === item[0] ? <Loading /> : 'Delete'}</button>
+                            </td>
+                        </tr>
 
-                ))}
+                    )) : (
+                        <tr>
+                            <td colSpan={6}>
+                                <h1 className="text-center text-2xl">Dont Product</h1>
+                            </td>
+                        </tr>
+                    )
+                }
             </tbody>
 
 
     }
-
-
-
 
     const tableHead = [
         {
@@ -209,15 +206,16 @@ export function Dashboard() {
 
     return (
         <>
-            <h1 className="text-center text-3xl"> Product List</h1>
-            <div className="relative overflow-x-auto mt-8">
+        <div className="mt-[80px] ">
+        <h1 className="text-center  text-3xl"> Product List</h1>
+            <div className="h-screen  relative overflow-x-auto mt-8">
                 <Table tableHead={tableHead}>
                     {content}
                 </Table>
 
             </div>
-
-
+        </div>
+            
 
             {showModal ? (
                 <>
@@ -226,38 +224,32 @@ export function Dashboard() {
                         className=" justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                     >
                         {
-                            viewProducts && (
-                                <div className=" relative w-auto my-6 mx-auto max-w-3xl">
-                                    {/*content*/}
-                                    <div className=" dark:bg-gray-800 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                            <h3 className=" text-3xl font-semibold">
-                                                {viewProducts.title}
-                                            </h3>
-                                        </div>
-                                        {/*body*/}
-                                        <div className="relative p-6 flex-auto">
-                                            <img className="h-80     w-max mx-auto max-w-lg rounded-lg" src={viewProducts.link} alt="" />
-                                            <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                                                {viewProducts.description}
-                                            </p>
-                                        </div>
-                                        {/*footer*/}
-                                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                                            <button
-                                                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                                type="button"
-                                                onClick={() => setShowModal(false)}
-                                            >
-                                                Close
-                                            </button>
-                                        </div>
+                            loading ? (<Loading />) : <div className="relative w-auto  mx-auto max-w-2xl">
+                                <div className=" dark:bg-gray-800 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                    <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                        <h3 className=" text-3xl font-semibold">
+                                            {viewProducts.title}
+                                        </h3>
                                     </div>
-
-
+                                    <div className="relative p-6 flex-auto">
+                                        <img className="h-80 w-max mx-auto max-w-lg rounded-lg" src={viewProducts.link} alt="" />
+                                        <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
+                                            {viewProducts.description}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                                        <button
+                                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                            type="button"
+                                            onClick={() => setShowModal(false)}
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
                                 </div>
-                            )
+
+
+                            </div>
                         }
 
                     </div>

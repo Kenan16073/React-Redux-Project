@@ -1,45 +1,49 @@
-
-import { useEffect, useState } from "react";
-import axios from 'axios'
+import { useProductsGetQuery } from "../store/products/productsApi"
 import { Cards } from "./Cards";
-
+import { LoadingPage } from "./LoadingPage";
 
 
 
 
 export function Mehsul() {
 
-    const [post, setPost] = useState([])
-   
+    const { data, isLoading, isError } = useProductsGetQuery();
 
 
-    async function getProducts() {
-        const { data } = await axios.get('https://fakestoreapi.com/products')
-        setPost(data)
-
-    }
-
-    useEffect(() => {
-        getProducts();
-    }, [])
+    let responseData;
 
 
-    
+    if (isLoading) {
+        responseData = <LoadingPage />
+    } else if (isError) {
+        responseData = 'error'
+    } else {
 
+        let productsArr = Object.entries(data).filter(item => {
+            return item[1].status === true;
+        });
 
-    return (
-        <div className="max-w-screen-xl mx-auto">
-
+        responseData = (
             <div className=" flex flex-wrap justify-between mt-[20px] gap-y-5">
 
                 {
-                    post.map(item => (
-                        <Cards key={item.id} item={item} />
+                    productsArr.map(item => (
+                        <Cards key={item[0]} id={item[0]} item={item[1]} />
                     ))
                 }
             </div>
-        </div>
+        )
+    }
 
+
+
+    return (
+        <div className="mt-[80px]">
+            <h1 className="text-center text-3xl">Products</h1>
+            <div className="max-w-screen-xl   mx-auto">
+                {responseData}
+            </div>
+        </div>
 
     );
 }

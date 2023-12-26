@@ -13,6 +13,8 @@ import { RequareAuth } from "./components/RequareAuth"
 import { Add } from "./components/Admin/Add"
 import { Dashboard } from "./components/Admin/Dashboard"
 import { Edit } from "./components/Admin/Edit"
+import { Error } from "./components/404"
+import { Footer } from "./components/Footer"
 
 export default function App() {
 
@@ -43,6 +45,7 @@ export default function App() {
           <Route path="/detail/:id" element={<ProductsDetail />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Error />} />
 
           {/* private rote */}
           <Route element={<RequareAuth />}>
@@ -52,9 +55,7 @@ export default function App() {
           </Route>
         </Routes>
 
-
-
-
+        <Footer/>
       </Router>
     </>
   )

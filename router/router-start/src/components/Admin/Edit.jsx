@@ -51,10 +51,10 @@ export function Edit() {
 
 
     return (
-        <div>
+        <div className="mt-[80px]">
             <h1 className="text-center text-3xl my-3">Products Add</h1>
 
-            <div className="w-[50%] mx-auto mt-5">
+            <div className="w-[50%] h-screen mx-auto mt-5">
                 <form action="" onSubmit={formik.handleSubmit} >
                     <div className="mb-5">
                         <label htmlFor="base-input" className=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Title</label>
