@@ -27,10 +27,12 @@ export function Header() {
 
 
   useEffect(() => {
-    const decodedToken = decodeToken(token)
-    if (decodedToken) {
-      const { email } = decodedToken
-      setUserData(email)
+    if (token) {
+      const decodedToken = decodeToken(token)
+      if (decodedToken) {
+        const { email } = decodedToken
+        setUserData(email)
+      }
     }
   }, [])
 
