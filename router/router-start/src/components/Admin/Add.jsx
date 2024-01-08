@@ -14,7 +14,7 @@ export function Add() {
             price: '',
             brand: '',
             description: '',
-            status : false
+            status : "false"
         },
         validationSchema: addproductSchema,
         onSubmit: values => {

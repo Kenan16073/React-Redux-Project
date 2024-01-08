@@ -159,7 +159,7 @@ export function Dashboard() {
                                 {item[1].brand}
                             </td>
                             <td className="px-6 py-4">
-                                {item[1].status ? (<span className="text-green-500">Active</span>) : (<span className="text-red-500">Deactive</span>)}
+                                {item[1].status === "true" ? (<span className="text-green-500">Active</span>) : (<span className="text-red-500">Deactive</span>)}
                             </td>
                             <td className="flex justify-evenly py-4">
                                 <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onClick={() => openModal(item[0])}  >Views</button>

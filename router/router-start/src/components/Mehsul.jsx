@@ -20,7 +20,7 @@ export function Mehsul() {
     } else {
 
         let productsArr = Object.entries(data).filter(item => {
-            return item[1].status === true;
+            return item[1].status === "true";
         });
 
         responseData = (

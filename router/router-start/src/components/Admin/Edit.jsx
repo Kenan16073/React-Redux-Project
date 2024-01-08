@@ -31,10 +31,11 @@ export function Edit() {
             price:'',
             brand: '',
             description: '',
-            status: false
+            status: "false"
         },
         validationSchema: addproductSchema,
         onSubmit: async values => {
+            values.status = "false"
             const res = await editProduct(values)
             if(res.data){
                 navigate('/admin/dashboard')
